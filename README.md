@@ -6,7 +6,6 @@ Este projeto foi desenvolvido utilizando as tecnologias Node JS, Express e Mongo
 
 # 002-crud-completo
 Este projeto foi desenvolvido utilizando as seguintes tecnologias:
-1. Node JS
+1. Básico sobre Node.js
 2. Express 
-3. MongoDB
-4. Pure CSS (https://purecss.io/)
+3. Geração de boletos bancários
