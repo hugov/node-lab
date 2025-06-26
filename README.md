@@ -9,3 +9,4 @@ Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 1. Básico sobre Node.js
 2. Express 
 3. Geração de boletos bancários
+4. Converte um HTML em PDF com (https://www.npmjs.com/package/puppeteer) , exemplo usado o boleto do Banco do Brasil

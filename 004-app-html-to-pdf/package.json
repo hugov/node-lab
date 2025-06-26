@@ -1,0 +1,16 @@
+{
+  "name": "app-html-to-pdf",
+  "version": "1.0.0",
+  "description": "Gerador de PDF com html-pdf",
+  "main": "server.js",
+  "scripts": {
+    "start": "OPENSSL_CONF=/dev/null node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "puppeteer": "^13.5.1"
+  }
+}
