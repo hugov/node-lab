@@ -1,0 +1,79 @@
+services:
+  express-app:
+    build: ./express-app
+    container_name: express-app
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - LOKI_URL=http://loki:3100
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://tempo:4318
+    depends_on:
+      - loki
+      - tempo
+    networks:
+      - observability
+
+  loki:
+    image: grafana/loki:3.1.1
+    container_name: loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - observability
+
+  tempo:
+    image: grafana/tempo:2.4.1
+    container_name: tempo
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    volumes:
+      - ./tempo.yaml:/etc/tempo/tempo.yaml
+    ports:
+      - "3200:3200" # API Grafana
+      - "4318:4318" # OTLP HTTP
+      - "4317:4317" # OTLP gRPC (opcional)
+    networks:
+      - observability
+
+  mimir:
+    image: grafana/mimir:2.13.0
+    container_name: mimir
+    ports:
+      - "9009:9009"
+    networks:
+      - observability
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - express-app
+    networks:
+      - observability
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - loki
+      - tempo
+      - mimir
+      - prometheus
+    networks:
+      - observability
+
+networks:
+  observability:
+    driver: bridge
